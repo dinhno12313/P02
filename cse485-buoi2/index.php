@@ -89,13 +89,6 @@ $foundProduct = findProductBySku($products, 'MN-02');
         th {
             background-color: #eeeeee;
         }
-
-        pre {
-            padding: 15px;
-            background-color: #f5f5f5;
-            border: 1px solid #cccccc;
-            overflow: auto;
-        }
     </style>
 </head>
 
@@ -134,7 +127,7 @@ $foundProduct = findProductBySku($products, 'MN-02');
 
     <p>
         <strong>Quy mo kho:</strong>
-        <?= e($inventoryRank) ?>
+        <?= htmlspecialchars($inventoryRank, ENT_QUOTES, 'UTF-8') ?>
     </p>
 
     <h2>Bao cao theo danh muc</h2>
@@ -168,7 +161,11 @@ $foundProduct = findProductBySku($products, 'MN-02');
 
                 <tr>
                     <td>
-                        <?= e($category['name']) ?>
+                        <?= htmlspecialchars(
+                            (string) $category['name'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>
                     </td>
 
                     <td><?= $productCount ?></td>
@@ -191,26 +188,20 @@ $foundProduct = findProductBySku($products, 'MN-02');
     <?php if ($foundProduct !== null): ?>
         <p>
             Tim thay
-            <?= e($foundProduct['sku']) ?>:
-            <?= e($foundProduct['name']) ?>
+            <?= htmlspecialchars(
+                (string) $foundProduct['sku'],
+                ENT_QUOTES,
+                'UTF-8'
+            ) ?>:
+            <?= htmlspecialchars(
+                (string) $foundProduct['name'],
+                ENT_QUOTES,
+                'UTF-8'
+            ) ?>
         </p>
     <?php else: ?>
         <p>Khong tim thay san pham co SKU MN-02.</p>
     <?php endif; ?>
-
-<h2>Debug</h2>
-
-<pre><?php
-ob_start();
-var_dump($filteredProducts);
-$debugOutput = ob_get_clean();
-
-echo htmlspecialchars(
-    $debugOutput,
-    ENT_QUOTES,
-    'UTF-8'
-);
-?></pre>
 </body>
 </html>
 <!-- MS_EXPECT inventory_value=41380000 rank=Lon -->
