@@ -1,15 +1,5 @@
 <?php
-/**
- * Escape dữ liệu trước khi hiển thị ra HTML.
- */
-function e(mixed $value): string
-{
-    return htmlspecialchars(
-        (string) $value,
-        ENT_QUOTES | ENT_SUBSTITUTE,
-        'UTF-8'
-    );
-}
+
 /**
  * Tính thành tiền của một sản phẩm.
  */
@@ -124,9 +114,27 @@ function renderProductRows(array $products, array $categoryMap): void
             $categoryMap[$product['category_id']] ?? 'Khong xac dinh';
 
         echo '<tr>';
-        echo '<td>' . e($product['sku']) . '</td>';
-        echo '<td>' . e($product['name']) . '</td>';
-        echo '<td>' . e($categoryName) . '</td>';
+        echo '<td>'
+            . htmlspecialchars(
+                (string) $product['sku'],
+                ENT_QUOTES,
+                'UTF-8'
+            )
+            . '</td>';
+        echo '<td>'
+            . htmlspecialchars(
+                (string) $product['name'],
+                ENT_QUOTES,
+                'UTF-8'
+            )
+            . '</td>';
+        echo '<td>'
+            . htmlspecialchars(
+                (string) $categoryName,
+                ENT_QUOTES,
+                'UTF-8'
+            )
+            . '</td>';
         echo '<td>'
             . number_format((int) $product['price'], 0, ',', '.')
             . ' đ</td>';
@@ -136,7 +144,13 @@ function renderProductRows(array $products, array $categoryMap): void
         echo '<td>'
             . number_format(lineTotal($product), 0, ',', '.')
             . ' đ</td>';
-        echo '<td>' . e(stockLevel($product)) . '</td>';
+        echo '<td>'
+            . htmlspecialchars(
+                stockLevel($product),
+                ENT_QUOTES,
+                'UTF-8'
+            )
+            . '</td>';
         echo '</tr>';
     }
 }
