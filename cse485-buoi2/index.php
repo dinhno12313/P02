@@ -18,18 +18,22 @@ foreach ($categories as $category) {
  */
 $categoryId = null;
 
-$inputCategoryId = filter_input(
-    INPUT_GET,
-    'category_id',
-    FILTER_VALIDATE_INT
-);
+if (isset($_GET['category_id'])) {
+    $rawCategoryId = $_GET['category_id'];
 
-if (
-    $inputCategoryId !== null
-    && $inputCategoryId !== false
-    && in_array($inputCategoryId, [1, 2, 3], true)
-) {
-    $categoryId = $inputCategoryId;
+    if (is_string($rawCategoryId)) {
+        $validatedCategoryId = filter_var(
+            $rawCategoryId,
+            FILTER_VALIDATE_INT
+        );
+
+        if (
+            $validatedCategoryId !== false
+            && array_key_exists($validatedCategoryId, $categoryMap)
+        ) {
+            $categoryId = $validatedCategoryId;
+        }
+    }
 }
 
 $filteredProducts = filterByCategory($products, $categoryId);
@@ -130,7 +134,7 @@ $foundProduct = findProductBySku($products, 'MN-02');
 
     <p>
         <strong>Quy mo kho:</strong>
-        <?= htmlspecialchars($inventoryRank, ENT_QUOTES, 'UTF-8') ?>
+        <?= e($inventoryRank) ?>
     </p>
 
     <h2>Bao cao theo danh muc</h2>
@@ -164,11 +168,7 @@ $foundProduct = findProductBySku($products, 'MN-02');
 
                 <tr>
                     <td>
-                        <?= htmlspecialchars(
-                            (string) $category['name'],
-                            ENT_QUOTES,
-                            'UTF-8'
-                        ) ?>
+                        <?= e($category['name']) ?>
                     </td>
 
                     <td><?= $productCount ?></td>
@@ -191,22 +191,14 @@ $foundProduct = findProductBySku($products, 'MN-02');
     <?php if ($foundProduct !== null): ?>
         <p>
             Tim thay
-            <?= htmlspecialchars(
-                (string) $foundProduct['sku'],
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>:
-            <?= htmlspecialchars(
-                (string) $foundProduct['name'],
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>
+            <?= e($foundProduct['sku']) ?>:
+            <?= e($foundProduct['name']) ?>
         </p>
     <?php else: ?>
         <p>Khong tim thay san pham co SKU MN-02.</p>
     <?php endif; ?>
 
-    <h2>Debug</h2>
+<h2>Debug</h2>
 
 <pre><?php
 ob_start();
