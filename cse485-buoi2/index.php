@@ -16,9 +16,21 @@ foreach ($categories as $category) {
  * Đọc category_id từ URL.
  * Nếu không có category_id thì hiển thị toàn bộ sản phẩm.
  */
-$categoryId = isset($_GET['category_id'])
-    ? (int) $_GET['category_id']
-    : null;
+$categoryId = null;
+
+$inputCategoryId = filter_input(
+    INPUT_GET,
+    'category_id',
+    FILTER_VALIDATE_INT
+);
+
+if (
+    $inputCategoryId !== null
+    && $inputCategoryId !== false
+    && in_array($inputCategoryId, [1, 2, 3], true)
+) {
+    $categoryId = $inputCategoryId;
+}
 
 $filteredProducts = filterByCategory($products, $categoryId);
 
