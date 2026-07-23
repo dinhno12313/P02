@@ -208,9 +208,17 @@ $foundProduct = findProductBySku($products, 'MN-02');
 
     <h2>Debug</h2>
 
-    <pre>
-<?php var_dump($filteredProducts); ?>
-    </pre>
+<pre><?php
+ob_start();
+var_dump($filteredProducts);
+$debugOutput = ob_get_clean();
+
+echo htmlspecialchars(
+    $debugOutput,
+    ENT_QUOTES,
+    'UTF-8'
+);
+?></pre>
 </body>
 </html>
 <!-- MS_EXPECT inventory_value=41380000 rank=Lon -->
